@@ -1,0 +1,30 @@
+{
+  "ok": true,
+  "independent_review": true,
+  "reviewer": "wardrobe_gaze_review_final",
+  "scope": "native-size extracted cardinals compared with idle",
+  "directions": [
+    {
+      "label": "000",
+      "verdict": "pass",
+      "reason": "Pupils clearly raised, chin lifted and neck visible relative to idle; unambiguously up."
+    },
+    {
+      "label": "090",
+      "verdict": "pass",
+      "reason": "Nose/face turn screen-right and one eye is emphasized; clip remains on image-right."
+    },
+    {
+      "label": "180",
+      "verdict": "pass",
+      "reason": "Lowered eyelids, lowered fringe and downward head pitch distinguish down from neutral/up."
+    },
+    {
+      "label": "270",
+      "verdict": "pass",
+      "reason": "Independent reviewer: nose and irises screen-left, genuine head turn, near eye emphasized, anatomical-left clip on image-right near side; identity and head/body volume stable. Separate unlabeled precheck recognizes left."
+    }
+  ],
+  "identity": "Sports outfit and face identity stable; no hard repairs remain.",
+  "revision": "new left cardinal with coherent head/nose/iris direction"
+}

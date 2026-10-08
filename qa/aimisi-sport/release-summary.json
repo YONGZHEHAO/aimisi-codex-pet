@@ -1,0 +1,17 @@
+{
+  "ok": true,
+  "pet_id": "aimisi-sport",
+  "display_name": "爱弥斯·运动装",
+  "spriteVersionNumber": 2,
+  "atlas_dimensions": [
+    1536,
+    2288
+  ],
+  "standard_states": 9,
+  "look_directions": 16,
+  "sha256": "9087fdac05f2dfcc2c7ead459946faf13095793cb1db6d4190f4f6876642893e",
+  "installed_sprite_matches_repository": true,
+  "codex_application_trigger_verified": false,
+  "wardrobe_selection": "manual separate pet entries",
+  "completed_at": "2026-10-08T12:10:25.067986+00:00"
+}

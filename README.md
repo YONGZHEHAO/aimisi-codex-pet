@@ -1,6 +1,6 @@
 # 爱弥斯 · Aimisi Codex Pet
 
-非官方、个人定制的 Codex 桌面宠物。当前发布包已升级至 v2，包含 9 个标准动作状态和 16 个注视方向。
+非官方、个人定制的 Codex 桌面宠物。原装、运动装、居家装均提供完整 v2 包，每套包含 9 个标准动作状态和 16 个注视方向。
 
 ![待机](previews/idle.gif)
 ![向右移动](previews/running-right.gif)
@@ -8,18 +8,29 @@
 
 ## 安装
 
-先备份已有的 `~/.codex/pets/aimisi` 文件夹，再将本仓库的 `pets/aimisi` 文件夹复制到 Codex 的 pets 目录。已有安装的用户也使用同一包更新。
+将所需条目复制到 `~/.codex/pets`。已有同名条目时先备份；也可以一次安装三套：
 
 ```powershell
-$destination = Join-Path $env:USERPROFILE '.codex\pets\aimisi'
-if (Test-Path -LiteralPath $destination) {
-    $backup = "$destination-backup-$(Get-Date -Format 'yyyyMMdd-HHmmss')"
-    Copy-Item -LiteralPath $destination -Destination $backup -Recurse
+$petRoot = Join-Path $env:USERPROFILE '.codex\pets'
+$backupRoot = Join-Path $env:USERPROFILE '.codex\pet-backups'
+New-Item -ItemType Directory -Path $petRoot,$backupRoot -Force | Out-Null
+foreach ($id in @('aimisi','aimisi-sport','aimisi-home')) {
+    $destination = Join-Path $petRoot $id
+    if (Test-Path -LiteralPath $destination) {
+        $backup = Join-Path $backupRoot "$id-$(Get-Date -Format 'yyyyMMdd-HHmmss')"
+        Copy-Item -LiteralPath $destination -Destination $backup -Recurse
+    }
+    Copy-Item -LiteralPath ".\pets\$id" -Destination $petRoot -Recurse -Force
 }
-Copy-Item -LiteralPath '.\pets\aimisi' -Destination (Join-Path $env:USERPROFILE '.codex\pets') -Recurse -Force
 ```
 
-重新打开宠物选择器并选择「爱弥斯」。如果仍显示旧图像，可重新打开应用。发布检查验证了文件和逐帧图像；未声称验证所有应用内动作触发器。
+重新打开宠物选择器，选择「爱弥斯」「爱弥斯·运动装」或「爱弥斯·居家装」。如果仍显示旧图像，可重新打开应用。服饰通过独立条目手动切换。发布检查覆盖图集、逐帧图像及浏览器预览，应用内所有动作触发器尚未实际验证。
+
+| 条目 | 造型与动作风格 | 预览 |
+| --- | --- | --- |
+| `aimisi` | 原装，元气俏皮 | [动作](previews/contact-sheet.png) · [注视](previews/look-directions.png) |
+| `aimisi-sport` | 蓝白运动外套、短裙裤与运动鞋，轻快互动 | [动作](previews/aimisi-sport/contact-sheet.png) · [注视](previews/aimisi-sport/look-directions.png) |
+| `aimisi-home` | 象牙白针织衫、蓝色袖口与家居鞋，放松陪伴 | [动作](previews/aimisi-home/contact-sheet.png) · [注视](previews/aimisi-home/look-directions.png) |
 
 ## 当前版本
 
@@ -29,11 +40,13 @@ Copy-Item -LiteralPath '.\pets\aimisi' -Destination (Join-Path $env:USERPROFILE 
 - 16 向注视：以向上为 000°，顺时针每隔 22.5°；不是人物全身旋转。
 - 左右移动分别制作，保留蓝色发夹的解剖侧别；待机更安静，受挫动作含恢复过程。
 
-当前安装包与 2026-10-08 核验的本地已安装原装 v2 完全一致。校验信息见 [发布检查](qa/release-summary.json)，完整图集与方向图见 [动作总览](previews/contact-sheet.png)、[注视方向](previews/look-directions.png)。
+原装安装包校验见 [原装发布检查](qa/release-summary.json)。两套新增服饰的本地安装图集与仓库图集逐字节一致，校验见 [换装发布检查](qa/wardrobe-release-summary.json)。每套的动作、方向语义、三位隔离盲审、透明通道及连续性检查记录保存在 `qa` 对应条目目录。
 
-## 换装进度
+## 动作与换装
 
-运动装、居家装与额外日常动作目前仍在制作完整原生状态，**尚未作为可安装宠物发布**。概念预览不是完整 v2 包，也不代表应用支持自动换装或额外随机触发器。
+两套新服饰均包含完整动作，左右移动独立制作以保留非对称发夹；跳跃保留蓄力、腾空与落地高度；挥手、等待、专注和受挫恢复各有对应手势与表情。注视以眼睛、眼睑和头颈配合，保持脚和下身稳定。
+
+当前使用应用原生的 9 个状态。服饰是手动切换的独立宠物条目；额外日常概念动作没有独立随机触发器，自动换装也不在本包中。衣摆和辫梢跟随较轻，少数接近竖直方向的横向线索较轻微，作为已复核的改进提醒保留。
 
 ## 权利说明
 

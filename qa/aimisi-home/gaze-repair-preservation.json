@@ -1,0 +1,7 @@
+{
+  "ok": true,
+  "approved_rows_0_through_9_rgba_identical": true,
+  "coherent_row10_changed": true,
+  "method": "decoded RGBA byte comparison against archived cleaned candidate",
+  "new_atlas_sha256": "f6861d521f92ccf6c7fc5fb3a72280874e664ae19980db13a12d93be3d898d7b"
+}

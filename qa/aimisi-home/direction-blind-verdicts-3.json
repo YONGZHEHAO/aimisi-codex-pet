@@ -1,0 +1,88 @@
+{
+  "pairs": [
+    {
+      "pair": "horizontal-1",
+      "A": "screen-right",
+      "B": "screen-left",
+      "reason": "A 的眼鼻口偏画面右侧；B 的眼鼻口偏画面左侧。"
+    },
+    {
+      "pair": "horizontal-2",
+      "A": "screen-left",
+      "B": "screen-right",
+      "reason": "A 鼻口和面部露出区朝左；B 的眼鼻口和侧脸朝右。"
+    },
+    {
+      "pair": "horizontal-3",
+      "A": "screen-left",
+      "B": "screen-right",
+      "reason": "A 左侧眼睛贴近脸缘、嘴朝左；B 的眼睛和嘴朝右。"
+    },
+    {
+      "pair": "horizontal-4",
+      "A": "screen-right",
+      "B": "screen-left",
+      "reason": "A 呈右向侧脸，鼻口在右侧；B 呈左向侧脸，鼻口在左侧。"
+    },
+    {
+      "pair": "horizontal-5",
+      "A": "screen-right",
+      "B": "screen-left",
+      "reason": "A 的面部露出区、眼鼻口集中在右侧；B 集中在左侧。"
+    },
+    {
+      "pair": "horizontal-6",
+      "A": "screen-left",
+      "B": "screen-right",
+      "reason": "两者均低头，A 的眼鼻口偏左，B 的眼鼻口偏右。"
+    },
+    {
+      "pair": "horizontal-7",
+      "A": "screen-right",
+      "B": "screen-left",
+      "reason": "A 的低头侧脸朝右；B 的眼睛、鼻口略朝左。"
+    },
+    {
+      "pair": "vertical-1",
+      "A": "down",
+      "B": "up",
+      "reason": "A 眼睑低垂且脸部低下；B 眼睛上移、下巴上扬。"
+    },
+    {
+      "pair": "vertical-2",
+      "A": "up",
+      "B": "down",
+      "reason": "A 双眼较高且脸朝上；B 刘海压低双眼、面部朝下。"
+    },
+    {
+      "pair": "vertical-3",
+      "A": "up",
+      "B": "down",
+      "reason": "A 的侧脸双眼上抬、下巴较高；B 眼睑下垂、脸部降低。"
+    },
+    {
+      "pair": "vertical-4",
+      "A": "up",
+      "B": "down",
+      "reason": "A 眼睛较高且侧脸上仰；B 眼睛较低且侧脸下垂。"
+    },
+    {
+      "pair": "vertical-5",
+      "A": "up",
+      "B": "down",
+      "reason": "A 双眼开放、脸部上扬；B 双眼被刘海压低且低头。"
+    },
+    {
+      "pair": "vertical-6",
+      "A": "down",
+      "B": "up",
+      "reason": "A 上眼睑压低、目光下垂；B 双眼较开放，鼻口和下巴上抬。"
+    },
+    {
+      "pair": "vertical-7",
+      "A": "up",
+      "B": "down",
+      "reason": "A 的眼睛和脸部较高、眼睑较开放；B 眼睛下移、上眼睑低垂。"
+    }
+  ]
+}

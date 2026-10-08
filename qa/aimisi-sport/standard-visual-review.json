@@ -1,0 +1,77 @@
+{
+  "ok": true,
+  "review_scope": "native-size static per-frame contacts and nine-row identity consistency",
+  "independent_review": true,
+  "rows": [
+    {
+      "state": "idle",
+      "verdict": "pass",
+      "reason": "Independent normal-size six-frame review passed; one blink and stable head/body/feet, mild cloth-follow-through warning; actual app playback not verified.",
+      "frames": 6,
+      "source_sha256": "a1f32251990b5dc66a796d17b587d066fce08eb1b973e403e449ecc95d8d5959"
+    },
+    {
+      "state": "running-right",
+      "verdict": "pass",
+      "reason": "New garment-transfer row: alternating knee lift/support and counter-swinging arms; continuous hip/knee/ankle anatomy and stable identity; endpoints close.",
+      "frames": 8,
+      "source_sha256": "6fc5033e1a56a6ee8a0e6905e2e4c2c8548adc2fff87a1fdfb9f861490061ea9"
+    },
+    {
+      "state": "running-left",
+      "verdict": "pass",
+      "reason": "Independent QA passed left-facing alternating legs/arms, coherent joints, anatomical-left near-side blue clip behind nose in image-right half, stable identity.",
+      "frames": 8,
+      "source_sha256": "a6c8e2cee36bcd618d3c8445f8f6e7610c885a0cd480d3c0759fd0c93f438326"
+    },
+    {
+      "state": "waving",
+      "verdict": "pass",
+      "reason": "Independent QA passed: 0/3 arms down; 1 raise by cheek; 2 outward gesture; stable face clip outfit and joints.",
+      "frames": 4,
+      "source_sha256": "743b9b3cd29b1a3e2dbbdfad6792008c942fb2355e0ad39bd4e4ade6279157cd"
+    },
+    {
+      "state": "jumping",
+      "verdict": "pass",
+      "reason": "Independent native-size review passed crouch/push/apex/descent/landing. Head and shoes stable versus idle, no global shrink, no crop, end near start. Stable-slots preserves intentional foot elevation.",
+      "frames": 5,
+      "source_sha256": "d275fe43011255c1ac2a682ff391934bd04912c462d11409327d15aa995f7c85"
+    },
+    {
+      "state": "failed",
+      "verdict": "pass",
+      "reason": "Corrected native-size re-review: mild worry to inward hands, sigh and recovery; endpoint expression differences are small at 192x208, no conspicuous pose snap. Earlier hard-failure assessment superseded.",
+      "frames": 8,
+      "source_sha256": "eb0f67bb47d608a5682e0a99ed3d6fad0b3fbbc2e0b06eda0ece123d3e7fcfc9"
+    },
+    {
+      "state": "waiting",
+      "verdict": "pass",
+      "reason": "0/5 near baseline; raised palm, expectant head/eyes and blink; stable anatomy and identity.",
+      "frames": 6,
+      "source_sha256": "f4865c23e1754c3c3548f2f1e4ec2cf8e05cb8e1a7b7e562e79a8944a95d812d"
+    },
+    {
+      "state": "running",
+      "verdict": "pass",
+      "reason": "Independent QA passed task-work semantics: finger/elbow variation and blink, planted feet, stable pose and identity.",
+      "frames": 6,
+      "source_sha256": "055e9d42ec427243d59b8fdebfafe1572d05dec2cf60e7e2c0c60fa634a5255a"
+    },
+    {
+      "state": "review",
+      "verdict": "pass",
+      "reason": "Hand near chin, focused lowered gaze/blink and soft recovery; clothing/joints stable and endpoint expression difference minor.",
+      "frames": 6,
+      "source_sha256": "44a91f64d852cb0673f420c14985c275ff3f2b0f4f649db229b55d3361838ae1"
+    }
+  ],
+  "total_review": "warning",
+  "hard_repairs": [],
+  "accepted_warnings": [
+    "Jump uses shared stable-slots extraction; independent review confirms head/shoe volume and airborne height.",
+    "Cloth/braid follow-through is restrained."
+  ],
+  "application_trigger_verified": false
+}

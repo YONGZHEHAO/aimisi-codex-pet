@@ -1,0 +1,31 @@
+{
+  "visual_qa": "pass",
+  "reviewer": "final_outfit_visual_review",
+  "scope": "Independent final native-size static extended contact sheet and neutral plus16 direction review; existing standard-row independent QA and byte-preservation evidence; not actual Codex application triggers or dynamic playback.",
+  "qa_note": "宽袖、衣摆、短裤、鞋、发饰及身体连接一致；look 行与 neutral 尺度相称，未见阻断性解剖或注册缺陷。标准九行沿用已通过的独立审查，preservation 确认 rows 0–9 RGBA 未变。结构及去色溢报告均通过，alpha 保留。",
+  "direction_semantics": {
+    "000": "pass：双眼上望、下巴抬起，区别于 neutral",
+    "022.5": "pass：上望并轻微向屏幕右移",
+    "045": "pass：眼睛及脸面上右",
+    "067.5": "pass：右转为主并保留上望",
+    "090": "pass：鼻口与眼睛明确指向屏幕右",
+    "112.5": "pass：右转并低头",
+    "135": "pass：明确下右",
+    "157.5": "pass：下望为主，仍保持向右",
+    "180": "pass：对称低头、眼睛下望，非 neutral",
+    "202.5": "pass：下望并轻微向左",
+    "225": "pass：脸面与眼睛下左",
+    "247.5": "pass：左转为主并保留下望",
+    "270": "pass：鼻口与眼睛明确指向屏幕左",
+    "292.5": "pass：左转并开始抬头",
+    "315": "pass：明确上左",
+    "337.5": "pass：上望为主，仍保留向左"
+  },
+  "review_warnings": [
+    "022.5、202.5 的水平分量较轻，但有标签全循环中仍读作正确象限。",
+    "连续性报告标记157.5→180（2416差异像素，中心差4.74 px）及337.5→000（2020差异像素，中心差3.54 px）。静态对照可见头部转向步幅稍大，但身体与鞋底保持锚定，没有明显尺度突变、方向反转或断裂；作为轻微接缝警告接受。",
+    "布料与辫子的随动克制，沿用标准行既有轻微警告。"
+  ],
+  "repair_rows": [],
+  "repair_notes": []
+}

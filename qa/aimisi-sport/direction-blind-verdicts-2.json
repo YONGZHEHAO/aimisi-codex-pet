@@ -1,0 +1,88 @@
+{
+  "pairs": [
+    {
+      "pair": "horizontal-1",
+      "A": "screen-right",
+      "B": "screen-left",
+      "reason": "A's face is turned slightly right; B's eye and mouth placement favors a slight left turn."
+    },
+    {
+      "pair": "horizontal-2",
+      "A": "screen-left",
+      "B": "screen-right",
+      "reason": "A's nose-mouth area and eyes favor left; B's face opening and gaze favor right."
+    },
+    {
+      "pair": "horizontal-3",
+      "A": "screen-left",
+      "B": "screen-right",
+      "reason": "A shows a left-facing three-quarter face; B shows the opposite right-facing face."
+    },
+    {
+      "pair": "horizontal-4",
+      "A": "screen-left",
+      "B": "screen-right",
+      "reason": "A's face is concentrated toward the left cheek; B's nose-mouth area points right."
+    },
+    {
+      "pair": "horizontal-5",
+      "A": "screen-left",
+      "B": "screen-right",
+      "reason": "Both have lowered eyes, but A's face turns left and B's face turns right."
+    },
+    {
+      "pair": "horizontal-6",
+      "A": "screen-left",
+      "B": "screen-right",
+      "reason": "Despite downward gaze, A's facial center favors left and B's favors right."
+    },
+    {
+      "pair": "horizontal-7",
+      "A": "screen-left",
+      "B": "screen-right",
+      "reason": "A's lowered face has a slight left bias; B has a clearer right-facing three-quarter profile."
+    },
+    {
+      "pair": "vertical-1",
+      "A": "down",
+      "B": "up",
+      "reason": "A's eyes sit low under lowered lids; B has lifted eyes and an upturned face."
+    },
+    {
+      "pair": "vertical-2",
+      "A": "down",
+      "B": "up",
+      "reason": "A's gaze is lowered beneath the fringe; B's open eyes and chin orientation favor up."
+    },
+    {
+      "pair": "vertical-3",
+      "A": "down",
+      "B": "up",
+      "reason": "A looks down through lowered lids; B's eyes and face are lifted."
+    },
+    {
+      "pair": "vertical-4",
+      "A": "down",
+      "B": "up",
+      "reason": "A has a modestly lowered gaze and face; B has a more open, elevated gaze."
+    },
+    {
+      "pair": "vertical-5",
+      "A": "up",
+      "B": "down",
+      "reason": "A's eyes are raised with an upturned face; B's eyes are lowered under the fringe."
+    },
+    {
+      "pair": "vertical-6",
+      "A": "down",
+      "B": "up",
+      "reason": "A's gaze and chin are lowered; B's eyes are higher and the face is lifted."
+    },
+    {
+      "pair": "vertical-7",
+      "A": "down",
+      "B": "up",
+      "reason": "A has lowered eyelids and downward gaze; B has a more elevated, open gaze."
+    }
+  ]
+}

@@ -1,0 +1,153 @@
+{
+  "ok": true,
+  "independent_review": true,
+  "reviewer": "gaze_repaired_semantics",
+  "directions": [
+    {
+      "label": "000",
+      "verdict": "pass",
+      "expected": "up",
+      "observed": "双眼左右基本对称，无明显横偏；瞳孔上移，下方脸颊露出增加",
+      "horizontal": "双眼左右基本对称，无明显横偏",
+      "vertical": "瞳孔上移，下方脸颊露出增加",
+      "reason": "上视明确，与neutral可区分"
+    },
+    {
+      "label": "022.5",
+      "verdict": "pass",
+      "expected": "up-right",
+      "observed": "瞳孔与面部重心轻微向屏幕右偏；保持抬眼，下方脸部空间较大",
+      "horizontal": "瞳孔与面部重心轻微向屏幕右偏",
+      "vertical": "保持抬眼，下方脸部空间较大",
+      "reason": "双轴成立，顺接000"
+    },
+    {
+      "label": "045",
+      "verdict": "pass",
+      "expected": "up-right",
+      "observed": "双眼瞳孔和面部偏屏幕右；瞳孔偏上，脸部轻微上仰",
+      "horizontal": "双眼瞳孔和面部偏屏幕右",
+      "vertical": "瞳孔偏上，脸部轻微上仰",
+      "reason": "右上象限正确"
+    },
+    {
+      "label": "067.5",
+      "verdict": "warning",
+      "expected": "up-right",
+      "observed": "瞳孔及面部重心明确右移；轻微抬眼，与邻帧高度差较细微",
+      "horizontal": "瞳孔及面部重心明确右移",
+      "vertical": "轻微抬眼，与邻帧高度差较细微",
+      "reason": "无反转或错象限，小角度区分较弱"
+    },
+    {
+      "label": "090",
+      "verdict": "pass",
+      "expected": "right",
+      "observed": "脸朝屏幕右转，双眼注视右侧；基本水平，无主导上下分量",
+      "horizontal": "脸朝屏幕右转，双眼注视右侧",
+      "vertical": "基本水平，无主导上下分量",
+      "reason": "主方向无歧义"
+    },
+    {
+      "label": "112.5",
+      "verdict": "pass",
+      "expected": "down-right",
+      "observed": "保持明显右向面部和瞳孔偏移；注视低于090，轻微低头",
+      "horizontal": "保持明显右向面部和瞳孔偏移",
+      "vertical": "注视低于090，轻微低头",
+      "reason": "双轴可见，顺接090"
+    },
+    {
+      "label": "135",
+      "verdict": "pass",
+      "expected": "down-right",
+      "observed": "面部和瞳孔偏屏幕右；明显低头，眼睛靠刘海下缘，注视偏低",
+      "horizontal": "面部和瞳孔偏屏幕右",
+      "vertical": "明显低头，眼睛靠刘海下缘，注视偏低",
+      "reason": "右下象限明确"
+    },
+    {
+      "label": "157.5",
+      "verdict": "warning",
+      "expected": "down-right",
+      "observed": "保留较轻右向不对称；低头和下视明确",
+      "horizontal": "保留较轻右向不对称",
+      "vertical": "低头和下视明确",
+      "reason": "无反向，和135之间角度层次细微"
+    },
+    {
+      "label": "180",
+      "verdict": "pass",
+      "expected": "down",
+      "observed": "面部双眼恢复近对称；明显下视、低头，上方刘海压低",
+      "horizontal": "面部双眼恢复近对称",
+      "vertical": "明显下视、低头，上方刘海压低",
+      "reason": "下视主方向无歧义"
+    },
+    {
+      "label": "202.5",
+      "verdict": "warning",
+      "expected": "down-left",
+      "observed": "瞳孔和面部轻微屏幕左偏；保持低头及下视",
+      "horizontal": "瞳孔和面部轻微屏幕左偏",
+      "vertical": "保持低头及下视",
+      "reason": "左分量较弱，方向未反转"
+    },
+    {
+      "label": "225",
+      "verdict": "pass",
+      "expected": "down-left",
+      "observed": "瞳孔和脸部重心比180左移；低眼位及低头保留",
+      "horizontal": "瞳孔和脸部重心比180左移",
+      "vertical": "低眼位及低头保留",
+      "reason": "左下象限成立"
+    },
+    {
+      "label": "247.5",
+      "verdict": "pass",
+      "expected": "down-left",
+      "observed": "面部左转，眼睛注视屏幕左；相对270保持低眼位和下视",
+      "horizontal": "面部左转，眼睛注视屏幕左",
+      "vertical": "相对270保持低眼位和下视",
+      "reason": "双轴可见，进入270方向正确"
+    },
+    {
+      "label": "270",
+      "verdict": "pass",
+      "expected": "left",
+      "observed": "脸轮廓和双眼明显朝屏幕左，右侧头发更多；主导水平左视，无主导上下分量",
+      "horizontal": "脸轮廓和双眼明显朝屏幕左，右侧头发更多",
+      "vertical": "主导水平左视，无主导上下分量",
+      "reason": "屏幕左无歧义，不是正面或右视"
+    },
+    {
+      "label": "292.5",
+      "verdict": "pass",
+      "expected": "up-left",
+      "observed": "保持左转和左向注视；比270抬眼，眼睛开放，下方脸部空间增加",
+      "horizontal": "保持左转和左向注视",
+      "vertical": "比270抬眼，眼睛开放，下方脸部空间增加",
+      "reason": "双轴成立，左向连续"
+    },
+    {
+      "label": "315",
+      "verdict": "pass",
+      "expected": "up-left",
+      "observed": "瞳孔及面部重心偏屏幕左；明显抬眼、轻微上仰",
+      "horizontal": "瞳孔及面部重心偏屏幕左",
+      "vertical": "明显抬眼、轻微上仰",
+      "reason": "左上象限正确"
+    },
+    {
+      "label": "337.5",
+      "verdict": "pass",
+      "expected": "up-left",
+      "observed": "相对000保留小幅屏幕左偏；上视主导，脸部抬起",
+      "horizontal": "相对000保留小幅屏幕左偏",
+      "vertical": "上视主导，脸部抬起",
+      "reason": "自然顺接000，无可见回环跳变"
+    }
+  ],
+  "continuity_review": "Latest independent static review: no wrong quadrant/reversal/identity or size pop. Metrics have no warnings or alpha holes; maximum adjacent center2.5px, area1.0204. Weak minor-axis cues accepted as warnings.",
+  "revision": "entire coherent row10 rebuilt from approved new left cardinal and exact row9 body geometry"
+}

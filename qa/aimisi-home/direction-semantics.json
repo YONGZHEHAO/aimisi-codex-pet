@@ -1,0 +1,153 @@
+{
+  "ok": true,
+  "independent_review": true,
+  "reviewer": "gaze_repaired_semantics",
+  "revision": "entire coherent row10 rebuilt from stronger new left cardinal and exact row9 body geometry",
+  "directions": [
+    {
+      "label": "000",
+      "verdict": "pass",
+      "expected": "up",
+      "observed": "双眼脸部近对称；抬眼明显，下方脸颊露出增加",
+      "horizontal": "双眼脸部近对称",
+      "vertical": "抬眼明显，下方脸颊露出增加",
+      "reason": "上视明确，与neutral不同"
+    },
+    {
+      "label": "022.5",
+      "verdict": "pass",
+      "expected": "up-right",
+      "observed": "瞳孔与面部轻微向屏幕右移；保持抬眼和轻微上仰",
+      "horizontal": "瞳孔与面部轻微向屏幕右移",
+      "vertical": "保持抬眼和轻微上仰",
+      "reason": "双轴成立，右分量小于045"
+    },
+    {
+      "label": "045",
+      "verdict": "pass",
+      "expected": "up-right",
+      "observed": "脸部瞳孔偏屏幕右；仍偏上，保留上仰",
+      "horizontal": "脸部瞳孔偏屏幕右",
+      "vertical": "仍偏上，保留上仰",
+      "reason": "右上象限成立"
+    },
+    {
+      "label": "067.5",
+      "verdict": "warning",
+      "expected": "up-right",
+      "observed": "右转和右侧注视清楚；抬眼轻微，接近090水平眼位",
+      "horizontal": "右转和右侧注视清楚",
+      "vertical": "抬眼轻微，接近090水平眼位",
+      "reason": "无错象限或反转，上分量较弱"
+    },
+    {
+      "label": "090",
+      "verdict": "pass",
+      "expected": "right",
+      "observed": "面部朝右，瞳孔注视屏幕右；整体近水平",
+      "horizontal": "面部朝右，瞳孔注视屏幕右",
+      "vertical": "整体近水平",
+      "reason": "右主方向无歧义"
+    },
+    {
+      "label": "112.5",
+      "verdict": "pass",
+      "expected": "down-right",
+      "observed": "保持右向脸部和瞳孔；相较090眼位降低，出现低头",
+      "horizontal": "保持右向脸部和瞳孔",
+      "vertical": "相较090眼位降低，出现低头",
+      "reason": "双轴可见"
+    },
+    {
+      "label": "135",
+      "verdict": "pass",
+      "expected": "down-right",
+      "observed": "右转和右侧注视明确；眼位降低，刘海压近眼睛，下视清楚",
+      "horizontal": "右转和右侧注视明确",
+      "vertical": "眼位降低，刘海压近眼睛，下视清楚",
+      "reason": "右下象限正确"
+    },
+    {
+      "label": "157.5",
+      "verdict": "warning",
+      "expected": "down-right",
+      "observed": "脸部仍较明显右转；低头和下视明确",
+      "horizontal": "脸部仍较明显右转",
+      "vertical": "低头和下视明确",
+      "reason": "无错象限；右分量收敛不足，至180面部回正稍大，未见整体尺寸跳变"
+    },
+    {
+      "label": "180",
+      "verdict": "pass",
+      "expected": "down",
+      "observed": "双眼面部恢复近对称；低头明显，瞳孔眼位偏低",
+      "horizontal": "双眼面部恢复近对称",
+      "vertical": "低头明显，瞳孔眼位偏低",
+      "reason": "下主方向明确，前边界数值提示保留warning"
+    },
+    {
+      "label": "202.5",
+      "verdict": "warning",
+      "expected": "down-left",
+      "observed": "眼睛面部小幅向屏幕左移；保持下视低头",
+      "horizontal": "眼睛面部小幅向屏幕左移",
+      "vertical": "保持下视低头",
+      "reason": "左分量弱但未右偏反转"
+    },
+    {
+      "label": "225",
+      "verdict": "pass",
+      "expected": "down-left",
+      "observed": "脸部重心瞳孔屏幕左移；眼位低、轻微低头",
+      "horizontal": "脸部重心瞳孔屏幕左移",
+      "vertical": "眼位低、轻微低头",
+      "reason": "双轴成立，左向增强"
+    },
+    {
+      "label": "247.5",
+      "verdict": "warning",
+      "expected": "down-left",
+      "observed": "左转面部和左侧注视清楚；相对270眼位稍低，证据较细",
+      "horizontal": "左转面部和左侧注视清楚",
+      "vertical": "相对270眼位稍低，证据较细",
+      "reason": "象限正确，下分量较弱"
+    },
+    {
+      "label": "270",
+      "verdict": "pass",
+      "expected": "left",
+      "observed": "面部嘴和眼睛集中屏幕左偏，右侧头发更多；主要水平视线",
+      "horizontal": "面部嘴和眼睛集中屏幕左偏，右侧头发更多",
+      "vertical": "主要水平视线",
+      "reason": "左向无歧义，不是正面或右视"
+    },
+    {
+      "label": "292.5",
+      "verdict": "pass",
+      "expected": "up-left",
+      "observed": "保留左转和左向瞳孔；比270抬眼，眼睛展开、下方脸部空间增加",
+      "horizontal": "保留左转和左向瞳孔",
+      "vertical": "比270抬眼，眼睛展开、下方脸部空间增加",
+      "reason": "双轴清楚"
+    },
+    {
+      "label": "315",
+      "verdict": "pass",
+      "expected": "up-left",
+      "observed": "面部瞳孔明显偏屏幕左；眼睛上移，面部微抬",
+      "horizontal": "面部瞳孔明显偏屏幕左",
+      "vertical": "眼睛上移，面部微抬",
+      "reason": "左上象限明确"
+    },
+    {
+      "label": "337.5",
+      "verdict": "pass",
+      "expected": "up-left",
+      "observed": "左偏比315收小，未跨到右侧；保持抬眼上仰，下方脸颊比neutral开放",
+      "horizontal": "左偏比315收小，未跨到右侧",
+      "vertical": "保持抬眼上仰，下方脸颊比neutral开放",
+      "reason": "双轴正确，回000合理；数值差异保留minor warning，无明显整体突跳"
+    }
+  ],
+  "continuity_review": "Latest independent static review: no wrong quadrant, reversal, identity change or conspicuous body-size snap. Two row-boundary diff outliers accepted as minor warnings; facial recentering slightly pronounced but body scale remains stable."
+}

@@ -1,0 +1,77 @@
+{
+  "ok": true,
+  "review_scope": "native-size static per-frame contacts and nine-row identity consistency",
+  "independent_review": true,
+  "rows": [
+    {
+      "state": "idle",
+      "verdict": "pass",
+      "reason": "Independent normal-size six-frame review passed; quiet blink and small sleeve/hem variation, stable identity and loop endpoints; cloth lag weak, app playback not verified.",
+      "frames": 6,
+      "source_sha256": "f7ee5e6a5aaf544e5ad978fa8908e3b49a8b51055415041e34554f10d9371e34"
+    },
+    {
+      "state": "running-right",
+      "verdict": "pass",
+      "reason": "Independent native contact review: anatomical limb poses alternate, right direction clear, home outfit and head/shoe volume stable, no obvious joint distortion. Static only.",
+      "frames": 8,
+      "source_sha256": "59172a84970c012f3ba16c2eacff3b9bf0d8349fd9d25021de5a766ce970c003"
+    },
+    {
+      "state": "running-left",
+      "verdict": "pass",
+      "reason": "Independent native contact review: left-facing, near clip behind nose in image-right, limb poses alternate, outfit/head stable, no obvious joint distortion. Static only.",
+      "frames": 8,
+      "source_sha256": "56e751a8fdcc64068482a01eaf8a24be2f5bf8f416a8c1c821042b219907c04a"
+    },
+    {
+      "state": "waving",
+      "verdict": "pass",
+      "reason": "Independent QA passed: 0/3 arms down; 1/2 same hand raised and waved; identity clothing joints and endpoints stable.",
+      "frames": 4,
+      "source_sha256": "311e6e1a24bda1c5f9cd26e95ae8a79f9636d448ab50c363e354c9b5c3482929"
+    },
+    {
+      "state": "jumping",
+      "verdict": "pass",
+      "reason": "Independent native contact review: crouch, push-off, airborne, descent, recovery; frames0/4 near-match; head/shoes maintain volume against idle. Stable-slots preserves vertical action, no joint or alpha boundary break. Static only.",
+      "frames": 5,
+      "source_sha256": "8c0bbe586dfea461cf4c3df1d15ec26298d18ed350945e1de35bde33aba1918d"
+    },
+    {
+      "state": "failed",
+      "verdict": "pass",
+      "reason": "New spaced coherent strip: worry, hands inward, eyes close/sigh and gentle recovery; minor final expression change accepted, no large snap.",
+      "frames": 8,
+      "source_sha256": "c3d6f9d748c2c1226810e2138424ee2749e1d781ff4d5f9e29ce81d9c8194121"
+    },
+    {
+      "state": "waiting",
+      "verdict": "pass",
+      "reason": "Expectant palm/head/blink sequence with similar0/5 and stable home outfit.",
+      "frames": 6,
+      "source_sha256": "cffae21ebe907e7373e9083a718feb67c654cc42c5724542ab2a5ecb50ca10ec"
+    },
+    {
+      "state": "running",
+      "verdict": "pass",
+      "reason": "State is active task work, not foot-running. Finger/elbow microvariation and blink at3 then reopen4/5; planted feet correct; previous gait-based failure superseded.",
+      "frames": 6,
+      "source_sha256": "561a91dc94de47040a5469208a42cdd42459426695b6cf11e5da8f2aef0641df"
+    },
+    {
+      "state": "review",
+      "verdict": "pass",
+      "reason": "Hand near chin, lowered gaze/blink and recovery; stable joints/clothing, minor gentle endpoint expression difference.",
+      "frames": 6,
+      "source_sha256": "d5f646c2fb36168b2b81eca93e1ee82333276826e1db7109dad78818f25b0243"
+    }
+  ],
+  "total_review": "pass",
+  "hard_repairs": [],
+  "accepted_warnings": [
+    "Jump uses shared stable-slots extraction; independent review confirms head/shoe volume and airborne height.",
+    "Cloth/braid follow-through is restrained."
+  ],
+  "application_trigger_verified": false
+}

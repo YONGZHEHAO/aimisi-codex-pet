@@ -1,0 +1,76 @@
+{
+  "ok": true,
+  "scope": "Final-atlas native browser preview, 9 standard loops plus16-direction loop per outfit; not Codex app triggers",
+  "clips": [
+    {
+      "state": "idle",
+      "loaded": true,
+      "complete_loops": 1,
+      "draws": 7,
+      "errors": []
+    },
+    {
+      "state": "running-right",
+      "loaded": true,
+      "complete_loops": 1,
+      "draws": 9,
+      "errors": []
+    },
+    {
+      "state": "running-left",
+      "loaded": true,
+      "complete_loops": 1,
+      "draws": 9,
+      "errors": []
+    },
+    {
+      "state": "waving",
+      "loaded": true,
+      "complete_loops": 1,
+      "draws": 5,
+      "errors": []
+    },
+    {
+      "state": "jumping",
+      "loaded": true,
+      "complete_loops": 1,
+      "draws": 6,
+      "errors": []
+    },
+    {
+      "state": "failed",
+      "loaded": true,
+      "complete_loops": 1,
+      "draws": 9,
+      "errors": []
+    },
+    {
+      "state": "waiting",
+      "loaded": true,
+      "complete_loops": 1,
+      "draws": 7,
+      "errors": []
+    },
+    {
+      "state": "running",
+      "loaded": true,
+      "complete_loops": 1,
+      "draws": 7,
+      "errors": []
+    },
+    {
+      "state": "review",
+      "loaded": true,
+      "complete_loops": 1,
+      "draws": 7,
+      "errors": []
+    },
+    {
+      "state": "look",
+      "loaded": true,
+      "complete_loops": 1,
+      "draws": 17,
+      "errors": []
+    }
+  ]
+}

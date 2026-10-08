@@ -1,0 +1,88 @@
+{
+  "pairs": [
+    {
+      "pair": "horizontal-1",
+      "A": "screen-right",
+      "B": "screen-left",
+      "reason": "A's facial center and visible gaze lean right; B's facial center and gaze lean left."
+    },
+    {
+      "pair": "horizontal-2",
+      "A": "screen-left",
+      "B": "screen-right",
+      "reason": "A shows a leftward three-quarter face; B shows a rightward three-quarter face."
+    },
+    {
+      "pair": "horizontal-3",
+      "A": "screen-left",
+      "B": "screen-right",
+      "reason": "A's eyes and mouth face left; B's eyes and mouth face right."
+    },
+    {
+      "pair": "horizontal-4",
+      "A": "screen-left",
+      "B": "screen-right",
+      "reason": "A has the exposed eye and facial opening toward the left; B's facial opening is toward the right."
+    },
+    {
+      "pair": "horizontal-5",
+      "A": "screen-left",
+      "B": "screen-right",
+      "reason": "Both are lowered, but A's facial axis leans left and B's leans right."
+    },
+    {
+      "pair": "horizontal-6",
+      "A": "screen-left",
+      "B": "screen-right",
+      "reason": "The lowered eyes and mouth sit leftward in A's face and rightward in B's face."
+    },
+    {
+      "pair": "horizontal-7",
+      "A": "screen-left",
+      "B": "screen-right",
+      "reason": "A's downward face has a slight leftward turn; B has a clearer rightward turn."
+    },
+    {
+      "pair": "vertical-1",
+      "A": "down",
+      "B": "up",
+      "reason": "A's eyes are lowered under the fringe; B's eyes sit higher with an upturned face."
+    },
+    {
+      "pair": "vertical-2",
+      "A": "down",
+      "B": "up",
+      "reason": "A looks down with low, partly covered eyes; B's face and open eyes are raised."
+    },
+    {
+      "pair": "vertical-3",
+      "A": "down",
+      "B": "up",
+      "reason": "A has a lowered gaze; B's visible eye line and face are raised."
+    },
+    {
+      "pair": "vertical-4",
+      "A": "down",
+      "B": "up",
+      "reason": "A's eye line sits lower beneath the fringe; B shows a raised, more open eye line."
+    },
+    {
+      "pair": "vertical-5",
+      "A": "up",
+      "B": "down",
+      "reason": "A's eyes and chin are lifted; B looks downward from beneath the fringe."
+    },
+    {
+      "pair": "vertical-6",
+      "A": "down",
+      "B": "up",
+      "reason": "A's face is tucked down; B has a raised, open gaze."
+    },
+    {
+      "pair": "vertical-7",
+      "A": "down",
+      "B": "up",
+      "reason": "A has lowered eyelids and a tucked facial angle; B's eyes and facial angle are raised."
+    }
+  ]
+}
