@@ -1,0 +1,99 @@
+{
+  "visual_qa": "pass",
+  "state_verdicts": [
+    {
+      "state": "idle",
+      "verdict": "pass",
+      "evidence": "六帧微呼吸、半闭眼blink再恢复，低干扰；头冠双辫裙翼稳定，无明显横移裁切透明横缝。"
+    },
+    {
+      "state": "running-right",
+      "verdict": "pass",
+      "evidence": "右向脸鼻口明确，左太阳穴小发饰远侧较窄；双腿伸收支撑交换可辨，03→04及07→00头冠锚点稳定，无显著全身横跳。"
+    },
+    {
+      "state": "running-left",
+      "verdict": "pass",
+      "evidence": "左向浅三分之四成立，近侧发夹在画面右半头部鼻后，未移到另一解剖侧；两腿屈伸交替，裙翼向后，跨半周期与首尾无显著跳变。"
+    },
+    {
+      "state": "waving",
+      "verdict": "pass",
+      "evidence": "同一画面左手完成预备抬起外摆收回，另一手安静；正面身份饰物完整，无新道具。"
+    },
+    {
+      "state": "failed",
+      "verdict": "pass",
+      "evidence": "担忧下视双手内收闭眼叹息再恢复，不仅换表情；末帧轻微柔和笑容是重试恢复而非庆祝。"
+    }
+  ],
+  "review_warnings": [
+    "左跑前后两半节拍相似，手臂摆幅较弱。",
+    "闲置头部外轮廓及眼圆度有轻微局部变化，非身份漂移。",
+    "GIF工具仅首帧，连续播放观感未实际验证。"
+  ],
+  "motion_review_scope": {
+    "native_png_frames_inspected": 34,
+    "ordered_png_loops_reviewed": [
+      "idle00–05→00",
+      "running-right00–07→00",
+      "running-left00–07→00",
+      "waving00–03→00",
+      "failed00–07→00"
+    ],
+    "gif_timing_verified": {
+      "idle": [
+        280,
+        110,
+        110,
+        140,
+        140,
+        320
+      ],
+      "running-right": [
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        220
+      ],
+      "running-left": [
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        220
+      ],
+      "waving": [
+        140,
+        140,
+        140,
+        280
+      ],
+      "failed": [
+        140,
+        140,
+        140,
+        140,
+        140,
+        140,
+        140,
+        240
+      ]
+    },
+    "gif_loop_metadata": "all infinite",
+    "actual_playback_verified": false,
+    "codex_trigger_verified": false,
+    "gaze_qa": "Previously passed QA reused, no fresh blind review; visual display shows no new breakage.",
+    "preservation": "Previous jumping/waiting/running/review/neutral/16look RGBA-identical per deterministic preservation report; no new visually observed breakage.",
+    "authoritative_checks": "review, v2validation, despill ok; transparentRGB residue0, alpha preserved."
+  },
+  "repair_rows": [],
+  "repair_notes": "No mandatory repairs; no additional despill or regeneration needed."
+}

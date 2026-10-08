@@ -1,0 +1,30 @@
+{
+  "published_date": "2026-10-08",
+  "package": "pets/aimisi",
+  "spriteVersionNumber": 2,
+  "dimensions": [
+    1536,
+    2288
+  ],
+  "cell_dimensions": [
+    192,
+    208
+  ],
+  "standard_states": 9,
+  "look_directions": 16,
+  "spritesheet_sha256": "4ec43974b7ab9c4c1a0ef4f7fba1d1e06981d051458bac02a70aae1b88f04486",
+  "matches_verified_installed_package": true,
+  "structural_validation": {
+    "ok": true,
+    "format": "WEBP",
+    "mode": "RGBA",
+    "transparent_rgb_residue_pixels": 0,
+    "errors": [],
+    "warnings": []
+  },
+  "visual_review": "passed native-size ordered frame review; accepted warnings retained in final-visual-review.json",
+  "look_review": "unchanged previously approved directions; blind cardinals passed; intermediate-axis warnings retained",
+  "app_trigger_verified": false,
+  "wardrobe_variants_installable": false,
+  "automatic_outfit_switching_added": false
+}
