@@ -1,60 +1,196 @@
-name: Star email notification
+name: All public repositories - Star email notifications
 
 on:
+  schedule:
+    - cron: '7,22,37,52 * * * *'
   watch:
     types: [started]
+  push:
+    branches: [main]
+    paths: ['.github/workflows/star-email.yml']
   workflow_dispatch:
+    inputs:
+      send_test_email:
+        description: 'Send a test email if no new stars are found'
+        type: boolean
+        default: true
 
-permissions: {}
+permissions:
+  contents: write
+
+concurrency:
+  group: all-public-repositories-star-monitor
+  cancel-in-progress: false
 
 jobs:
-  notify:
+  monitor:
+    if: github.repository == 'YONGZHEHAO/aimisi-codex-pet'
     runs-on: ubuntu-latest
-    timeout-minutes: 3
+    timeout-minutes: 10
     steps:
-      - name: Send notification through QQ Mail
+      - name: Discover repositories and email new stars
         env:
+          GITHUB_TOKEN: ${{ github.token }}
+          STAR_GITHUB_TOKEN: ${{ secrets.STAR_GITHUB_TOKEN }}
           MAIL_ACCOUNT: ${{ secrets.STAR_MAIL_ACCOUNT }}
           MAIL_AUTH_CODE: ${{ secrets.STAR_MAIL_AUTH_CODE }}
+          SEND_TEST_EMAIL: ${{ github.event_name == 'workflow_dispatch' && inputs.send_test_email }}
         shell: python
         run: |
+          """Monitor all public repositories owned by one GitHub account."""
+          import base64
+          import copy
+          import hashlib
           import json
           import os
           import smtplib
           import ssl
+          import urllib.error
+          import urllib.parse
+          import urllib.request
           from email.message import EmailMessage
-
-          account = os.environ.get("MAIL_ACCOUNT", "").strip()
-          auth_code = os.environ.get("MAIL_AUTH_CODE", "").strip()
-          if not account or not auth_code:
-              raise SystemExit("Configure STAR_MAIL_ACCOUNT and STAR_MAIL_AUTH_CODE in repository Actions secrets.")
-
-          with open(os.environ["GITHUB_EVENT_PATH"], encoding="utf-8") as stream:
-              event = json.load(stream)
-          repository = os.environ["GITHUB_REPOSITORY"]
-          server_url = os.environ["GITHUB_SERVER_URL"]
-          repository_url = f"{server_url}/{repository}"
-          run_url = f"{repository_url}/actions/runs/{os.environ['GITHUB_RUN_ID']}"
-          is_test = os.environ["GITHUB_EVENT_NAME"] == "workflow_dispatch"
-
-          if is_test:
-              subject = f"[GitHub Star] 测试邮件：{repository}"
-              body = f"Star 邮件通知已配置成功。\n项目：{repository}\n{repository_url}\n\n运行记录：{run_url}\n\n这是一封测试邮件，不代表新增 Star。"
-          else:
-              actor = event["sender"]["login"]
-              count = event["repository"].get("stargazers_count")
-              subject = f"[GitHub Star] {repository} 收到来自 {actor} 的 Star"
-              body = f"你的项目收到一个新 Star。\n项目：{repository}\n用户：{actor}\n用户主页：{server_url}/{actor}\n项目链接：{repository_url}\n"
-              if count is not None:
-                  body += f"事件记录中的 Star 总数：{count}\n"
-              body += f"\n运行记录：{run_url}\n"
-
-          message = EmailMessage()
-          message["From"] = account
-          message["To"] = account
-          message["Subject"] = subject
-          message.set_content(body)
-          with smtplib.SMTP_SSL("smtp.qq.com", 465, context=ssl.create_default_context(), timeout=30) as smtp:
-              smtp.login(account, auth_code)
-              smtp.send_message(message)
-          print("Notification sent.")
+          
+          OWNER = "YONGZHEHAO"
+          SINCE = "2026-10-30T10:39:54Z"
+          STATE_BRANCH = "star-notification-state"
+          STATE_PATH = ".github/star-monitor/state.json"
+          
+          
+          class GitHub:
+              def __init__(self, token):
+                  self.token = token
+          
+              def request(self, path, method="GET", data=None, accept="application/vnd.github+json", missing_ok=False):
+                  headers = {"Authorization": f"Bearer {self.token}", "Accept": accept,
+                             "User-Agent": "YONGZHEHAO-star-monitor", "X-GitHub-Api-Version": "2022-11-28"}
+                  body = None if data is None else json.dumps(data).encode("utf-8")
+                  if body is not None:
+                      headers["Content-Type"] = "application/json"
+                  req = urllib.request.Request("https://api.github.com" + path, data=body,
+                                               headers=headers, method=method)
+                  try:
+                      with urllib.request.urlopen(req, timeout=45) as response:
+                          return json.load(response)
+                  except urllib.error.HTTPError as error:
+                      if error.code == 404 and missing_ok:
+                          return None
+                      raise RuntimeError(f"GitHub API returned HTTP {error.code} for {path}. "
+                                         "For cross-repository star access, configure STAR_GITHUB_TOKEN "
+                                         "with access to all owned repositories and Metadata read permission. "
+                                         "Also check token expiry, rate limits and Actions write permissions.") from None
+          
+              def pages(self, path, accept="application/vnd.github+json"):
+                  separator = "&" if "?" in path else "?"
+                  page = 1
+                  while True:
+                      batch = self.request(f"{path}{separator}per_page=100&page={page}", accept=accept)
+                      if not isinstance(batch, list):
+                          raise RuntimeError("Unexpected paginated GitHub response")
+                      yield from batch
+                      if len(batch) < 100:
+                          return
+                      page += 1
+          
+          
+          def detect(state, repositories, get_stars):
+              updated = copy.deepcopy(state)
+              notifications = []
+              for repo in repositories:
+                  if repo.get("private") or repo["owner"]["login"].lower() != OWNER.lower():
+                      continue
+                  repo_id = str(repo["id"])
+                  previous = state["repositories"].get(repo_id, {"seen": []})
+                  seen = set(previous["seen"])
+                  for star in get_stars(repo):
+                      timestamp = star.get("starred_at")
+                      if not timestamp or not star.get("user", {}).get("id"):
+                          raise RuntimeError("Star timestamp or user ID is missing; refusing to advance state")
+                      # Repository ID survives renames; the timestamp distinguishes re-stars.
+                      key = hashlib.sha256(f"{star['user']['id']}:{timestamp}".encode()).hexdigest()
+                      if key not in seen and timestamp >= state["since"]:
+                          notifications.append({"repository": repo["full_name"],
+                                                "actor": star["user"]["login"], "at": timestamp})
+                      seen.add(key)
+                  updated["repositories"][repo_id] = {"name": repo["full_name"], "seen": sorted(seen)}
+              notifications.sort(key=lambda item: (item["at"], item["repository"], item["actor"]))
+              return updated, notifications
+          
+          
+          def send_mail(account, password, subject, body):
+              message = EmailMessage()
+              message["From"] = account
+              message["To"] = account
+              message["Subject"] = subject
+              message.set_content(body)
+              with smtplib.SMTP_SSL("smtp.qq.com", 465, context=ssl.create_default_context(), timeout=30) as smtp:
+                  smtp.login(account, password)
+                  smtp.send_message(message)
+          
+          
+          def deliver_and_save(previous, updated, notifications, send, save, test=False):
+              if notifications:
+                  lines = [f"你的公开项目收到 {len(notifications)} 个新 Star：", ""]
+                  for item in notifications:
+                      lines.extend([f"项目：{item['repository']}", f"用户：{item['actor']}",
+                                    f"Star 时间（UTC）：{item['at']}",
+                                    f"https://github.com/{item['repository']}", ""])
+                  lines.append("自动监控所有现有及以后新增的公开项目，计划每 15 分钟检查一次。")
+                  send(f"[GitHub Star] 你的项目收到 {len(notifications)} 个新 Star", "\n".join(lines))
+              elif test:
+                  send("[GitHub Star] 自动通知测试成功",
+                       f"已成功扫描 {len(updated['repositories'])} 个公开项目，并完成邮件发送测试。\n"
+                       "以后新增的公开项目会自动纳入；有新 Star 才发送通知。\n"
+                       "计划每 15 分钟检查，实际运行可能延迟。这是测试邮件，不代表新增 Star。")
+              # Never acknowledge notifications when sending fails. A save failure after sending
+              # may cause a repeat on retry; prefer a repeat over silently losing a notification.
+              if updated != previous:
+                  save(updated)
+          
+          
+          def main():
+              account = os.environ.get("MAIL_ACCOUNT", "").strip()
+              password = os.environ.get("MAIL_AUTH_CODE", "").strip()
+              if not account or not password:
+                  raise RuntimeError("Email is not configured. Add STAR_MAIL_ACCOUNT and STAR_MAIL_AUTH_CODE "
+                                     "to aimisi-codex-pet repository Actions secrets, then run this workflow manually.")
+              if account.lower() != "909563422@qq.com":
+                  raise RuntimeError("STAR_MAIL_ACCOUNT must be 909563422@qq.com for the requested notification recipient.")
+              state_api = GitHub(os.environ["GITHUB_TOKEN"])
+              read_api = GitHub(os.environ.get("STAR_GITHUB_TOKEN", "").strip() or os.environ["GITHUB_TOKEN"])
+              host_repo = os.environ["GITHUB_REPOSITORY"]
+              state_endpoint = f"/repos/{host_repo}/contents/{STATE_PATH}"
+              stored = state_api.request(f"{state_endpoint}?ref={STATE_BRANCH}", missing_ok=True)
+              if stored is None:
+                  previous = {"version": 1, "since": SINCE, "repositories": {}}
+              else:
+                  previous = json.loads(base64.b64decode(stored["content"]))
+                  if previous.get("version") != 1 or not isinstance(previous.get("repositories"), dict):
+                      raise RuntimeError("Invalid notification state; refusing to discard it")
+              repositories = list(read_api.pages(f"/users/{OWNER}/repos?type=owner&sort=full_name"))
+              updated, notifications = detect(previous, repositories,
+                  lambda repo: read_api.pages(f"/repos/{repo['full_name']}/stargazers", "application/vnd.github.star+json"))
+          
+              def save(state):
+                  if stored is None:
+                      ref = state_api.request(f"/repos/{host_repo}/git/ref/heads/{STATE_BRANCH}", missing_ok=True)
+                      if ref is None:
+                          state_api.request(f"/repos/{host_repo}/git/refs", "POST",
+                                            {"ref": f"refs/heads/{STATE_BRANCH}", "sha": os.environ["GITHUB_SHA"]})
+                  payload = {"message": "Update star notification delivery state", "branch": STATE_BRANCH,
+                             "content": base64.b64encode((json.dumps(state, indent=2) + "\n").encode()).decode()}
+                  if stored is not None:
+                      payload["sha"] = stored["sha"]
+                  state_api.request(state_endpoint, "PUT", payload)
+          
+              test = os.environ.get("SEND_TEST_EMAIL", "false").lower() == "true"
+              deliver_and_save(previous, updated, notifications,
+                               lambda subject, body: send_mail(account, password, subject, body), save, test)
+              summary = f"Scanned {len(repositories)} public repositories; detected {len(notifications)} new stars."
+              print(summary)
+              if os.environ.get("GITHUB_STEP_SUMMARY"):
+                  with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as stream:
+                      stream.write(summary + "\n")
+          
+          
+          if __name__ == "__main__":
+              main()
