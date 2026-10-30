@@ -34,7 +34,7 @@ jobs:
           STAR_GITHUB_TOKEN: ${{ secrets.STAR_GITHUB_TOKEN }}
           MAIL_ACCOUNT: ${{ secrets.STAR_MAIL_ACCOUNT }}
           MAIL_AUTH_CODE: ${{ secrets.STAR_MAIL_AUTH_CODE }}
-          SEND_TEST_EMAIL: ${{ github.event_name == 'workflow_dispatch' && inputs.send_test_email }}
+          SEND_TEST_EMAIL: ${{ github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.send_test_email) }}
         shell: python
         run: |
           """Monitor all public repositories owned by one GitHub account."""
@@ -153,6 +153,11 @@ jobs:
               if not account or not password:
                   raise RuntimeError("Email is not configured. Add STAR_MAIL_ACCOUNT and STAR_MAIL_AUTH_CODE "
                                      "to aimisi-codex-pet repository Actions secrets, then run this workflow manually.")
+              if os.environ.get("SEND_TEST_EMAIL", "false").lower() == "true":
+                  send_mail(account, password, "[GitHub Star] 邮箱连接测试",
+                            "这是一封邮箱连接测试邮件，不代表新增 Star。\n"
+                            "收到此邮件说明发信通道正常；跨项目 Star 读取权限将单独验证。")
+                  print("SMTP transport test sent successfully.")
               state_api = GitHub(os.environ["GITHUB_TOKEN"])
               read_api = GitHub(os.environ.get("STAR_GITHUB_TOKEN", "").strip() or os.environ["GITHUB_TOKEN"])
               host_repo = os.environ["GITHUB_REPOSITORY"]
@@ -180,7 +185,7 @@ jobs:
                       payload["sha"] = stored["sha"]
                   state_api.request(state_endpoint, "PUT", payload)
           
-              test = os.environ.get("SEND_TEST_EMAIL", "false").lower() == "true"
+              test = False
               deliver_and_save(previous, updated, notifications,
                                lambda subject, body: send_mail(account, password, subject, body), save, test)
               summary = f"Scanned {len(repositories)} public repositories; detected {len(notifications)} new stars."
