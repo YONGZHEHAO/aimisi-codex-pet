@@ -153,8 +153,6 @@ jobs:
               if not account or not password:
                   raise RuntimeError("Email is not configured. Add STAR_MAIL_ACCOUNT and STAR_MAIL_AUTH_CODE "
                                      "to aimisi-codex-pet repository Actions secrets, then run this workflow manually.")
-              if account.lower() != "909563422@qq.com":
-                  raise RuntimeError("STAR_MAIL_ACCOUNT must be 909563422@qq.com for the requested notification recipient.")
               state_api = GitHub(os.environ["GITHUB_TOKEN"])
               read_api = GitHub(os.environ.get("STAR_GITHUB_TOKEN", "").strip() or os.environ["GITHUB_TOKEN"])
               host_repo = os.environ["GITHUB_REPOSITORY"]
