@@ -34,7 +34,7 @@ jobs:
           STAR_GITHUB_TOKEN: ${{ secrets.STAR_GITHUB_TOKEN }}
           MAIL_ACCOUNT: ${{ secrets.STAR_MAIL_ACCOUNT }}
           MAIL_AUTH_CODE: ${{ secrets.STAR_MAIL_AUTH_CODE }}
-          SEND_TEST_EMAIL: ${{ github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.send_test_email) }}
+          SEND_TEST_EMAIL: ${{ github.event_name == 'workflow_dispatch' && inputs.send_test_email }}
         shell: python
         run: |
           """Monitor all public repositories owned by one GitHub account."""
@@ -74,7 +74,14 @@ jobs:
                   except urllib.error.HTTPError as error:
                       if error.code == 404 and missing_ok:
                           return None
-                      raise RuntimeError(f"GitHub API returned HTTP {error.code} for {path}. "
+                      try:
+                          api_message = json.loads(error.read().decode("utf-8")).get("message", "No message")
+                      except (ValueError, UnicodeDecodeError):
+                          api_message = "No structured error message"
+                      api_message = api_message.replace(self.token, "[redacted]") if self.token else api_message
+                      remaining = error.headers.get("X-RateLimit-Remaining", "unknown")
+                      raise RuntimeError(f"GitHub API returned HTTP {error.code} for {path}: {api_message}. "
+                                         f"Rate limit remaining: {remaining}. "
                                          "For cross-repository star access, configure STAR_GITHUB_TOKEN "
                                          "with access to all owned repositories and Metadata read permission. "
                                          "Also check token expiry, rate limits and Actions write permissions.") from None
