@@ -11,7 +11,7 @@ on:
   workflow_dispatch:
     inputs:
       send_test_email:
-        description: 'Send a test email if no new stars are found'
+        description: 'Send a test email after the repository scan'
         type: boolean
         default: true
 
@@ -37,21 +37,19 @@ jobs:
           SEND_TEST_EMAIL: ${{ github.event_name == 'workflow_dispatch' && inputs.send_test_email }}
         shell: python
         run: |
-          """Monitor all public repositories owned by one GitHub account."""
+          """Monitor public repository star growth using GitHub's aggregate history API."""
           import base64
           import copy
-          import hashlib
           import json
           import os
           import smtplib
           import ssl
           import urllib.error
-          import urllib.parse
           import urllib.request
+          from datetime import datetime, timezone
           from email.message import EmailMessage
           
           OWNER = "YONGZHEHAO"
-          SINCE = "2026-10-30T10:39:54Z"
           STATE_BRANCH = "star-notification-state"
           STATE_PATH = ".github/star-monitor/state.json"
           
@@ -60,14 +58,13 @@ jobs:
               def __init__(self, token):
                   self.token = token
           
-              def request(self, path, method="GET", data=None, accept="application/vnd.github+json", missing_ok=False):
-                  headers = {"Authorization": f"Bearer {self.token}", "Accept": accept,
-                             "User-Agent": "YONGZHEHAO-star-monitor", "X-GitHub-Api-Version": "2022-11-28"}
+              def request(self, path, method="GET", data=None, missing_ok=False):
+                  headers = {"Authorization": f"Bearer {self.token}", "Accept": "application/vnd.github+json",
+                             "User-Agent": "YONGZHEHAO-star-monitor", "X-GitHub-Api-Version": "2026-03-10"}
                   body = None if data is None else json.dumps(data).encode("utf-8")
                   if body is not None:
                       headers["Content-Type"] = "application/json"
-                  req = urllib.request.Request("https://api.github.com" + path, data=body,
-                                               headers=headers, method=method)
+                  req = urllib.request.Request("https://api.github.com" + path, data=body, headers=headers, method=method)
                   try:
                       with urllib.request.urlopen(req, timeout=45) as response:
                           return json.load(response)
@@ -75,52 +72,64 @@ jobs:
                       if error.code == 404 and missing_ok:
                           return None
                       try:
-                          api_message = json.loads(error.read().decode("utf-8")).get("message", "No message")
+                          message = json.loads(error.read().decode("utf-8")).get("message", "No message")
                       except (ValueError, UnicodeDecodeError):
-                          api_message = "No structured error message"
-                      api_message = api_message.replace(self.token, "[redacted]") if self.token else api_message
-                      remaining = error.headers.get("X-RateLimit-Remaining", "unknown")
-                      raise RuntimeError(f"GitHub API returned HTTP {error.code} for {path}: {api_message}. "
-                                         f"Rate limit remaining: {remaining}. "
-                                         "For cross-repository star access, configure STAR_GITHUB_TOKEN "
-                                         "with access to all owned repositories and Metadata read permission. "
-                                         "Also check token expiry, rate limits and Actions write permissions.") from None
+                          message = "No structured error message"
+                      if self.token:
+                          message = message.replace(self.token, "[redacted]")
+                      raise RuntimeError(f"GitHub HTTP {error.code} for {path}: {message}") from None
           
-              def pages(self, path, accept="application/vnd.github+json"):
-                  separator = "&" if "?" in path else "?"
+              def repositories(self):
                   page = 1
                   while True:
-                      batch = self.request(f"{path}{separator}per_page=100&page={page}", accept=accept)
+                      batch = self.request(f"/users/{OWNER}/repos?type=owner&sort=full_name&per_page=100&page={page}")
                       if not isinstance(batch, list):
-                          raise RuntimeError("Unexpected paginated GitHub response")
-                      yield from batch
+                          raise RuntimeError("Unexpected repository response")
+                      for repo in batch:
+                          if not repo.get("private") and repo["owner"]["login"].lower() == OWNER.lower():
+                              yield repo
                       if len(batch) < 100:
                           return
                       page += 1
           
           
-          def detect(state, repositories, get_stars):
+          def daily_counts(history):
+              if not isinstance(history, list):
+                  raise RuntimeError("Unexpected star history response")
+              days = {}
+              for week in history:
+                  if not isinstance(week.get("week"), int) or len(week.get("days", [])) != 7:
+                      raise RuntimeError("Invalid star history week")
+                  for index, count in enumerate(week["days"]):
+                      if not isinstance(count, int) or count < 0:
+                          raise RuntimeError("Invalid daily star count")
+                      # Compare GitHub's own bucket IDs; its calendar boundaries may differ from UTC.
+                      days[f"{week['week']}:{index}"] = count
+              return days
+          
+          
+          def detect(state, repositories, get_history):
               updated = copy.deepcopy(state)
-              notifications = []
+              notices = []
+              initialized = state.get("initialized", False)
               for repo in repositories:
-                  if repo.get("private") or repo["owner"]["login"].lower() != OWNER.lower():
-                      continue
                   repo_id = str(repo["id"])
-                  previous = state["repositories"].get(repo_id, {"seen": []})
-                  seen = set(previous["seen"])
-                  for star in get_stars(repo):
-                      timestamp = star.get("starred_at")
-                      if not timestamp or not star.get("user", {}).get("id"):
-                          raise RuntimeError("Star timestamp or user ID is missing; refusing to advance state")
-                      # Repository ID survives renames; the timestamp distinguishes re-stars.
-                      key = hashlib.sha256(f"{star['user']['id']}:{timestamp}".encode()).hexdigest()
-                      if key not in seen and timestamp >= state["since"]:
-                          notifications.append({"repository": repo["full_name"],
-                                                "actor": star["user"]["login"], "at": timestamp})
-                      seen.add(key)
-                  updated["repositories"][repo_id] = {"name": repo["full_name"], "seen": sorted(seen)}
-              notifications.sort(key=lambda item: (item["at"], item["repository"], item["actor"]))
-              return updated, notifications
+                  current = daily_counts(get_history(repo))
+                  previous = state["repositories"].get(repo_id)
+                  if initialized:
+                      if previous is None:
+                          # Newly discovered public repository: report current stars once, clearly labelled.
+                          increase = int(repo["stargazers_count"])
+                      else:
+                          increase = sum(max(0, count - previous["days"].get(day, 0))
+                                         for day, count in current.items())
+                      if increase:
+                          notices.append({"repository": repo["full_name"], "increase": increase,
+                                          "total": repo["stargazers_count"], "new_repository": previous is None})
+                  updated["repositories"][repo_id] = {"name": repo["full_name"], "days": current,
+                                                       "total": repo["stargazers_count"]}
+              updated["initialized"] = True
+              return updated, notices
           
           
           def send_mail(account, password, subject, body):
@@ -134,22 +143,23 @@ jobs:
                   smtp.send_message(message)
           
           
-          def deliver_and_save(previous, updated, notifications, send, save, test=False):
-              if notifications:
-                  lines = [f"你的公开项目收到 {len(notifications)} 个新 Star：", ""]
-                  for item in notifications:
-                      lines.extend([f"项目：{item['repository']}", f"用户：{item['actor']}",
-                                    f"Star 时间（UTC）：{item['at']}",
-                                    f"https://github.com/{item['repository']}", ""])
-                  lines.append("自动监控所有现有及以后新增的公开项目，计划每 15 分钟检查一次。")
-                  send(f"[GitHub Star] 你的项目收到 {len(notifications)} 个新 Star", "\n".join(lines))
-              elif test:
-                  send("[GitHub Star] 自动通知测试成功",
-                       f"已成功扫描 {len(updated['repositories'])} 个公开项目，并完成邮件发送测试。\n"
-                       "以后新增的公开项目会自动纳入；有新 Star 才发送通知。\n"
-                       "计划每 15 分钟检查，实际运行可能延迟。这是测试邮件，不代表新增 Star。")
-              # Never acknowledge notifications when sending fails. A save failure after sending
-              # may cause a repeat on retry; prefer a repeat over silently losing a notification.
+          def deliver_and_save(previous, updated, notices, send, save, test=False):
+              if notices:
+                  lines = ["检测到你的公开项目 Star 统计增加：", ""]
+                  for notice in notices:
+                      change = (f"新发现的公开项目，当前有 {notice['total']} 个 Star"
+                                if notice["new_repository"] else f"新增 {notice['increase']} 个 Star；当前总数 {notice['total']}")
+                      lines.extend([f"项目：{notice['repository']}", change,
+                                    f"https://github.com/{notice['repository']}", ""])
+                  lines.append("计划每 15 分钟检查；以 GitHub 统计更新为准，短暂 Star 或同时取消可能无法识别。")
+                  send("[GitHub Star] 你的项目 Star 增加了", "\n".join(lines))
+              elif not previous.get("initialized") or test:
+                  send("[GitHub Star] 自动监控已启用" if not previous.get("initialized") else "[GitHub Star] 自动监控测试成功",
+                       f"已扫描 {len(updated['repositories'])} 个公开项目，读取 Star 统计成功。\n"
+                       "计划每 15 分钟检查，有新增 Star 统计才发邮件；以后新增的公开项目自动纳入。\n"
+                       "首次扫描建立基线，不补发已有 Star；新发现的项目已有 Star 时会单独说明。\n"
+                       "这是配置验证邮件，不代表新增 Star。")
+              # A send failure must leave the old baseline intact so the next run can retry.
               if updated != previous:
                   save(updated)
           
@@ -158,27 +168,24 @@ jobs:
               account = os.environ.get("MAIL_ACCOUNT", "").strip()
               password = os.environ.get("MAIL_AUTH_CODE", "").strip()
               if not account or not password:
-                  raise RuntimeError("Email is not configured. Add STAR_MAIL_ACCOUNT and STAR_MAIL_AUTH_CODE "
-                                     "to aimisi-codex-pet repository Actions secrets, then run this workflow manually.")
-              if os.environ.get("SEND_TEST_EMAIL", "false").lower() == "true":
-                  send_mail(account, password, "[GitHub Star] 邮箱连接测试",
-                            "这是一封邮箱连接测试邮件，不代表新增 Star。\n"
-                            "收到此邮件说明发信通道正常；跨项目 Star 读取权限将单独验证。")
-                  print("SMTP transport test sent successfully.")
+                  raise RuntimeError("Configure STAR_MAIL_ACCOUNT and STAR_MAIL_AUTH_CODE in Actions secrets")
               state_api = GitHub(os.environ["GITHUB_TOKEN"])
               read_api = GitHub(os.environ.get("STAR_GITHUB_TOKEN", "").strip() or os.environ["GITHUB_TOKEN"])
               host_repo = os.environ["GITHUB_REPOSITORY"]
-              state_endpoint = f"/repos/{host_repo}/contents/{STATE_PATH}"
-              stored = state_api.request(f"{state_endpoint}?ref={STATE_BRANCH}", missing_ok=True)
+              endpoint = f"/repos/{host_repo}/contents/{STATE_PATH}"
+              stored = state_api.request(f"{endpoint}?ref={STATE_BRANCH}", missing_ok=True)
               if stored is None:
-                  previous = {"version": 1, "since": SINCE, "repositories": {}}
+                  previous = {"version": 2, "initialized": False,
+                              "created_at": datetime.now(timezone.utc).isoformat(), "repositories": {}}
               else:
                   previous = json.loads(base64.b64decode(stored["content"]))
-                  if previous.get("version") != 1 or not isinstance(previous.get("repositories"), dict):
-                      raise RuntimeError("Invalid notification state; refusing to discard it")
-              repositories = list(read_api.pages(f"/users/{OWNER}/repos?type=owner&sort=full_name"))
-              updated, notifications = detect(previous, repositories,
-                  lambda repo: read_api.pages(f"/repos/{repo['full_name']}/stargazers", "application/vnd.github.star+json"))
+                  if previous.get("version") != 2 or not isinstance(previous.get("repositories"), dict):
+                      raise RuntimeError("Incompatible state; refusing to overwrite notification records")
+              repositories = list(read_api.repositories())
+              if not repositories:
+                  raise RuntimeError("No public repositories returned; refusing to initialize an empty baseline")
+              updated, notices = detect(previous, repositories,
+                  lambda repo: read_api.request(f"/repos/{repo['full_name']}/stargazers/history?per_page=30&page=1"))
           
               def save(state):
                   if stored is None:
@@ -190,12 +197,12 @@ jobs:
                              "content": base64.b64encode((json.dumps(state, indent=2) + "\n").encode()).decode()}
                   if stored is not None:
                       payload["sha"] = stored["sha"]
-                  state_api.request(state_endpoint, "PUT", payload)
+                  state_api.request(endpoint, "PUT", payload)
           
-              test = False
-              deliver_and_save(previous, updated, notifications,
-                               lambda subject, body: send_mail(account, password, subject, body), save, test)
-              summary = f"Scanned {len(repositories)} public repositories; detected {len(notifications)} new stars."
+              deliver_and_save(previous, updated, notices,
+                  lambda subject, body: send_mail(account, password, subject, body), save,
+                  test=os.environ.get("SEND_TEST_EMAIL", "false").lower() == "true")
+              summary = f"Scanned {len(repositories)} public repositories; {len(notices)} repositories with increased star counts. State saved successfully."
               print(summary)
               if os.environ.get("GITHUB_STEP_SUMMARY"):
                   with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as stream:
